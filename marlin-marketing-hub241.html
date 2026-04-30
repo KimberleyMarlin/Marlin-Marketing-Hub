@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Marlin Marketing Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* ── SCOPED TO .mmh ROOT ── */
+.mmh *, .mmh *::before, .mmh *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.mmh {
+  --forest: #1a3a2a;
+  --moss: #2d5a3d;
+  --sage: #5c8a5e;
+  --mint: #a8c9a0;
+  --cream: #f4f0e6;
+  --sand: #e6dcc8;
+  --terra: #c4714a;
+  --gold: #d4a847;
+  --bark: #6b4c35;
+  --white: #fdfcf8;
+  --text-dark: #1a2418;
+  --text-mid: #3d5040;
+  --text-light: #7a9680;
+  --blue: #3b7dd8;
+  --purple: #7b5ea7;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text-dark);
+  min-height: 100vh;
+}
+
+/* ── TOP BAR ── */
+.mmh-topbar {
+  background: var(--forest);
+  padding: 0 28px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.mmh-logo {
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  font-size: 17px;
+  color: var(--white);
+  letter-spacing: -0.03em;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.mmh-logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); animation: mmhpulse 2.5s infinite; }
+@keyframes mmhpulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+.mmh-nav-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.55);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.mmh-nav-btn:hover { background: rgba(255,255,255,0.08); color: var(--white); }
+.mmh-nav-btn.active { background: rgba(255,255,255,0.12); color: var(--white); font-weight: 600; }
+.mmh-spacer { flex: 1; }
+.mmh-venue-filter {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  padding: 5px 10px;
+  outline: none;
+  cursor: pointer;
+}
+.mmh-venue-filter option { background: var(--forest); color: var(--white); }
+.mmh-submit-btn {
+  background: var(--gold);
+  color: var(--forest);
+  border: none;
+  border-radius: 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+.mmh-submit-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+.mmh-avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg,var(--sage),var(--gold)); display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--white);cursor:pointer;margin-left:4px;flex-shrink:0; }
+
+/* ── PANELS ── */
+.mmh-panel { display: none; }
+.mmh-panel.active { display: block; }
+
+/* ── HERO STRIP ── */
+.mmh-hero {
+  background: linear-gradient(135deg, var(--forest) 0%, var(--moss) 100%);
+  padding: 32px 32px 28px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.mmh-hero::after {
+  content:'';position:absolute;right:-40px;top:-60px;width:360px;height:360px;
+  background:radial-gradient(circle,rgba(92,138,94,0.2) 0%,transparent 70%);pointer-events:none;
+}
+.mmh-hero-eyebrow { font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px; }
+.mmh-hero-eyebrow::before { content:'';display:inline-block;width:20px;height:2px;background:var(--gold); }
+.mmh-hero h1 { font-family:'Fraunces',serif;font-size:clamp(26px,3vw,40px);font-weight:900;color:var(--white);letter-spacing:-0.03em;line-height:1.05;margin-bottom:8px; }
+.mmh-hero h1 em { font-style:italic;color:var(--mint); }
+.mmh-hero-sub { font-size:13px;color:rgba(255,255,255,0.5);line-height:1.5;max-width:520px; }
+.mmh-kpi-row { display:flex;gap:12px;flex-wrap:wrap; }
+.mmh-kpi {
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:14px;
+  padding:16px 20px;min-width:110px;backdrop-filter:blur(8px);cursor:default;transition:background 0.2s;
+}
+.mmh-kpi:hover { background:rgba(255,255,255,0.13); }
+.mmh-kpi-num { font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--white);line-height:1; }
+.mmh-kpi-label { font-size:10px;color:rgba(255,255,255,0.45);letter-spacing:0.04em;margin-top:3px; }
+.mmh-kpi-tag { font-size:10px;background:rgba(92,138,94,0.35);color:var(--mint);padding:2px 7px;border-radius:12px;display:inline-block;margin-top:5px; }
+
+/* ── LAYOUT ── */
+.mmh-body { max-width:1400px;margin:0 auto;padding:28px 28px 60px;display:grid;grid-template-columns:1fr 288px;gap:24px; }
+.mmh-main { min-width:0; }
+.mmh-sidebar { min-width:0; }
+
+/* ── SECTION ── */
+.mmh-section { margin-bottom:28px; }
+.mmh-section-hdr { display:flex;align-items:center;justify-content:space-between;margin-bottom:14px; }
+.mmh-section-title { font-family:'Fraunces',serif;font-size:19px;font-weight:700;color:var(--forest);letter-spacing:-0.02em;display:flex;align-items:center;gap:8px; }
+.mmh-section-link { font-size:12px;color:var(--sage);text-decoration:none;font-weight:600;cursor:pointer;border:none;background:none;font-family:'DM Sans',sans-serif; }
+.mmh-section-link:hover { color:var(--forest); }
+
+/* ── PIPELINE STAGES ── */
+.mmh-pipeline { display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;margin-bottom:28px; }
+.mmh-stage {
+  background:var(--white);border-radius:14px;padding:16px;min-width:190px;flex:1;
+  border-top:3px solid var(--sand);transition:box-shadow 0.2s;
+}
+.mmh-stage:hover { box-shadow:0 4px 18px rgba(26,58,42,0.09); }
+.mmh-stage.s-idea { border-top-color:#94a3b8; }
+.mmh-stage.s-approve { border-top-color:var(--gold); }
+.mmh-stage.s-design { border-top-color:var(--purple); }
+.mmh-stage.s-plan { border-top-color:var(--blue); }
+.mmh-stage.s-publish { border-top-color:#4caf50; }
+.mmh-stage.s-collateral { border-top-color:var(--terra); }
+.mmh-stage-hdr { display:flex;justify-content:space-between;align-items:center;margin-bottom:12px; }
+.mmh-stage-name { font-size:11px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-light); }
+.mmh-stage-count { font-size:11px;font-weight:700;background:var(--cream);color:var(--text-mid);padding:2px 8px;border-radius:20px; }
+.mmh-card {
+  background:var(--cream);border-radius:10px;padding:11px 12px;margin-bottom:8px;
+  border:1.5px solid transparent;cursor:pointer;transition:border-color 0.18s,transform 0.15s;
+}
+.mmh-card:hover { border-color:var(--mint);transform:translateY(-1px); }
+.mmh-card-name { font-size:12px;font-weight:600;color:var(--forest);line-height:1.3;margin-bottom:4px; }
+.mmh-card-venue { font-size:10px;color:var(--text-light);margin-bottom:5px; }
+.mmh-card-footer { display:flex;align-items:center;justify-content:space-between; }
+.mmh-tag { font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;letter-spacing:0.02em; }
+.tag-event { background:rgba(59,125,216,0.12);color:#1d4ed8; }
+.tag-campaign { background:rgba(123,94,167,0.12);color:#5b21b6; }
+.tag-special { background:rgba(212,168,71,0.15);color:#92600a; }
+.mmh-card-date { font-size:10px;color:var(--text-light); }
+.mmh-card-avatars { display:flex;gap:-3px; }
+.mmh-mini-avatar { width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(--white);border:2px solid var(--white); }
+
+/* ── CALENDAR STRIP ── */
+.mmh-cal-grid { background:var(--white);border-radius:16px;padding:20px;border:1.5px solid var(--sand); }
+.mmh-cal-top { display:flex;justify-content:space-between;align-items:center;margin-bottom:14px; }
+.mmh-cal-month { font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--forest); }
+.mmh-cal-nav { display:flex;gap:5px; }
+.mmh-cal-navbtn { width:26px;height:26px;border-radius:7px;border:1.5px solid var(--sand);background:transparent;cursor:pointer;font-size:12px;color:var(--text-mid);transition:background 0.15s; }
+.mmh-cal-navbtn:hover { background:var(--sand); }
+.mmh-days-grid { display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center; }
+.mmh-day-lbl { font-size:9px;font-weight:700;letter-spacing:0.06em;color:var(--text-light);text-transform:uppercase;padding-bottom:6px; }
+.mmh-day { aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:11px;border-radius:7px;cursor:pointer;transition:background 0.12s;color:var(--text-mid);position:relative; }
+.mmh-day:hover { background:var(--sand); }
+.mmh-day.other { color:rgba(0,0,0,0.18); }
+.mmh-day.today { background:var(--forest);color:var(--white);font-weight:700; }
+.mmh-day.has-ev::after { content:'';position:absolute;bottom:2px;width:4px;height:4px;border-radius:50%;background:var(--terra); }
+.mmh-day.today.has-ev::after { background:var(--gold); }
+.mmh-events-list { margin-top:14px;display:flex;flex-direction:column;gap:7px; }
+.mmh-event-row { display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:9px;background:var(--cream);cursor:pointer;transition:background 0.14s; }
+.mmh-event-row:hover { background:var(--sand); }
+.mmh-ev-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0; }
+.mmh-ev-title { font-size:12px;font-weight:600;color:var(--forest);flex:1; }
+.mmh-ev-venue { font-size:10px;color:var(--text-light);font-style:italic; }
+.mmh-ev-date { font-size:10px;color:var(--text-light);white-space:nowrap; }
+
+/* ── DESIGN JOBS ── */
+.mmh-design-table { width:100%;border-collapse:collapse; }
+.mmh-design-table th { font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-light);padding:0 12px 10px;text-align:left;border-bottom:2px solid var(--sand); }
+.mmh-design-table td { font-size:12px;padding:10px 12px;border-bottom:1px solid var(--sand);vertical-align:middle; }
+.mmh-design-table tr:last-child td { border-bottom:none; }
+.mmh-design-table tr:hover td { background:rgba(0,0,0,0.015); }
+.mmh-job-name { font-weight:600;color:var(--forest); }
+.mmh-job-sub { font-size:10px;color:var(--text-light);margin-top:2px; }
+.mmh-priority { font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px; }
+.pri-urgent { background:rgba(196,113,74,0.15);color:#a13d1a; }
+.pri-high { background:rgba(212,168,71,0.15);color:#8a6a00; }
+.pri-normal { background:rgba(92,138,94,0.12);color:var(--moss); }
+.mmh-status-pill { font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px; }
+.sp-waiting { background:rgba(196,113,74,0.12);color:#a13d1a; }
+.sp-inprog { background:rgba(59,125,216,0.12);color:#1d4ed8; }
+.sp-review { background:rgba(212,168,71,0.15);color:#8a6a00; }
+.sp-done { background:rgba(76,175,80,0.12);color:#2e7d32; }
+
+/* ── VENUE OVERVIEW ── */
+.mmh-venues { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+.mmh-venue-card { background:var(--white);border-radius:13px;padding:16px;border:1.5px solid transparent;cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s; }
+.mmh-venue-card:hover { border-color:var(--mint);box-shadow:0 4px 14px rgba(26,58,42,0.08); }
+.mmh-venue-card.featured { border-color:var(--gold);background:linear-gradient(135deg,rgba(212,168,71,0.05),var(--white)); }
+.mmh-venue-name { font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--forest);margin-bottom:2px; }
+.mmh-venue-sub { font-size:11px;color:var(--text-light);margin-bottom:12px; }
+.mmh-venue-stats { display:flex;gap:12px; }
+.mmh-vs { text-align:center; }
+.mmh-vs-num { font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--forest);line-height:1; }
+.mmh-vs-lbl { font-size:9px;color:var(--text-light);letter-spacing:0.04em;text-transform:uppercase;margin-top:2px; }
+.mmh-venue-bar { margin-top:10px;height:4px;background:var(--sand);border-radius:3px;overflow:hidden; }
+.mmh-venue-fill { height:100%;border-radius:3px;background:linear-gradient(90deg,var(--sage),var(--mint)); }
+
+/* ── SIDEBAR ── */
+.mmh-sb-section { margin-bottom:22px; }
+.mmh-sb-title { font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--forest);margin-bottom:12px;display:flex;align-items:center;gap:7px; }
+.mmh-sb-tag { font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;background:var(--gold);color:var(--forest);padding:2px 7px;border-radius:12px;letter-spacing:0.04em; }
+
+/* announcements */
+.mmh-announce { background:var(--white);border-radius:12px;padding:13px 14px;border-left:3px solid var(--sage);margin-bottom:8px;cursor:pointer;transition:box-shadow 0.18s; }
+.mmh-announce:hover { box-shadow:0 3px 12px rgba(26,58,42,0.08); }
+.mmh-announce.pin { border-left-color:var(--gold); }
+.mmh-ann-lbl { font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--sage);margin-bottom:4px; }
+.mmh-announce.pin .mmh-ann-lbl { color:var(--gold); }
+.mmh-ann-title { font-size:12px;font-weight:600;color:var(--forest);line-height:1.35;margin-bottom:3px; }
+.mmh-ann-date { font-size:10px;color:var(--text-light); }
+
+/* specials */
+.mmh-special { background:var(--white);border-radius:12px;padding:13px 14px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;cursor:pointer;border:1.5px solid transparent;transition:border-color 0.18s; }
+.mmh-special:hover { border-color:var(--gold); }
+.mmh-special-icon { font-size:20px;flex-shrink:0; }
+.mmh-special-name { font-size:12px;font-weight:600;color:var(--forest);margin-bottom:2px; }
+.mmh-special-venue { font-size:10px;color:var(--text-light); }
+.mmh-special-disc { font-size:11px;font-weight:700;color:var(--terra);margin-top:3px; }
+
+/* files */
+.mmh-file { display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:9px;background:var(--white);margin-bottom:6px;cursor:pointer;transition:background 0.15s;border:1.5px solid transparent; }
+.mmh-file:hover { border-color:var(--mint);background:var(--cream); }
+.mmh-file-icon { font-size:16px;flex-shrink:0; }
+.mmh-file-name { font-size:12px;font-weight:600;color:var(--forest);flex:1; }
+.mmh-file-meta { font-size:10px;color:var(--text-light); }
+
+/* ── SUBMIT MODAL ── */
+.mmh-overlay { display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:500;align-items:center;justify-content:center; }
+.mmh-overlay.open { display:flex; }
+.mmh-modal { background:var(--white);border-radius:20px;padding:32px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;position:relative;animation:mmhSlide 0.25s ease; }
+@keyframes mmhSlide { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.mmh-modal-title { font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--forest);margin-bottom:4px; }
+.mmh-modal-sub { font-size:13px;color:var(--text-light);margin-bottom:22px; }
+.mmh-form-row { margin-bottom:16px; }
+.mmh-label { font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-mid);display:block;margin-bottom:6px; }
+.mmh-input, .mmh-select, .mmh-textarea {
+  width:100%;padding:10px 14px;border:1.5px solid var(--sand);border-radius:10px;
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-dark);background:var(--cream);
+  outline:none;transition:border-color 0.18s;
+}
+.mmh-input:focus, .mmh-select:focus, .mmh-textarea:focus { border-color:var(--sage); }
+.mmh-textarea { resize:vertical;min-height:80px; }
+.mmh-form-row-2 { display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px; }
+.mmh-type-row { display:flex;gap:10px;margin-bottom:16px; }
+.mmh-type-opt { flex:1;padding:10px;border-radius:10px;border:2px solid var(--sand);cursor:pointer;text-align:center;transition:border-color 0.18s,background 0.18s; }
+.mmh-type-opt input { display:none; }
+.mmh-type-opt:has(input:checked) { border-color:var(--sage);background:rgba(92,138,94,0.07); }
+.mmh-type-opt-icon { font-size:20px;display:block;margin-bottom:4px; }
+.mmh-type-opt-label { font-size:11px;font-weight:600;color:var(--text-mid); }
+.mmh-modal-actions { display:flex;gap:10px;justify-content:flex-end;margin-top:22px; }
+.mmh-btn-cancel { padding:9px 20px;border-radius:20px;border:1.5px solid var(--sand);background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--text-mid);cursor:pointer; }
+.mmh-btn-submit { padding:9px 22px;border-radius:20px;border:none;background:var(--forest);color:var(--white);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:transform 0.15s; }
+.mmh-btn-submit:hover { transform:translateY(-1px); }
+.mmh-close-modal { position:absolute;top:16px;right:18px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-light);line-height:1; }
+
+/* ── RESPONSIVE ── */
+@media (max-width:900px) {
+  .mmh-body { grid-template-columns:1fr; }
+  .mmh-kpi-row { display:none; }
+  .mmh-venues { grid-template-columns:1fr; }
+  .mmh-pipeline { flex-direction:column; }
+  .mmh-stage { min-width:unset; }
+  .mmh-topbar { flex-wrap: wrap; height: auto; padding: 8px 16px; }
+  .mmh-nav-btn { font-size: 11px; padding: 5px 8px; }
+  .mmh-hero { grid-template-columns: 1fr; padding: 24px 16px; }
+  .mmh-hero h1 { font-size: 28px; }
+  .mmh { overflow-x: hidden; }
+  .mmh-body { padding: 20px 16px; }
+}
+@media (max-width:600px) {
+  .mmh-topbar { gap: 4px; }
+  .mmh-logo { font-size: 14px; }
+  .mmh-venue-filter { font-size: 11px; padding: 4px 8px; }
+  .mmh-submit-btn { font-size: 11px; padding: 6px 12px; }
+  .mmh-hero h1 { font-size: 24px; }
+  .mmh-hero-sub { font-size: 12px; }
+}
+</style>
+</head>
+<body>
+<div class="mmh" id="mmhRoot">
+
+<!-- TOP BAR -->
+<nav class="mmh-topbar">
+  <div class="mmh-logo"><span class="mmh-logo-dot"></span>Marlin Marketing</div>
+  <button class="mmh-nav-btn active" onclick="mmhNav(this,'overview')">Overview</button>
+  <button class="mmh-nav-btn" onclick="mmhNav(this,'pipeline')">Pipeline</button>
+  <button class="mmh-nav-btn" onclick="mmhNav(this,'calendar')">Calendar</button>
+  <button class="mmh-nav-btn" onclick="mmhNav(this,'design')">Design Jobs</button>
+  <button class="mmh-nav-btn" onclick="mmhNav(this,'venues')">Venues</button>
+  <div class="mmh-spacer"></div>
+  <select class="mmh-venue-filter" onchange="mmhFilterVenue(this.value)">
+    <option value="all">All Venues</option>
+    <option value="riverside">Riverside Bar</option>
+    <option value="anchor">The Anchor</option>
+    <option value="pavilion">Marlin Pavilion</option>
+    <option value="rooftop">Rooftop Garden</option>
+  </select>
+  <button class="mmh-submit-btn" onclick="mmhOpenModal()">＋ Submit Idea / Event</button>
+  <div class="mmh-avatar">JK</div>
+</nav>
+
+<!-- SUBMIT MODAL -->
+<div class="mmh-overlay" id="mmhOverlay">
+  <div class="mmh-modal">
+    <button class="mmh-close-modal" onclick="mmhCloseModal()">✕</button>
+    <div class="mmh-modal-title">Submit an Idea or Event</div>
+    <div class="mmh-modal-sub">Venue managers — fill this in and it'll enter the approval queue automatically.</div>
+    <div class="mmh-type-row">
+      <label class="mmh-type-opt"><input type="radio" name="mmhType" value="event" checked><span class="mmh-type-opt-icon">🎉</span><span class="mmh-type-opt-label">Event</span></label>
+      <label class="mmh-type-opt"><input type="radio" name="mmhType" value="campaign"><span class="mmh-type-opt-icon">📣</span><span class="mmh-type-opt-label">Campaign</span></label>
+      <label class="mmh-type-opt"><input type="radio" name="mmhType" value="special"><span class="mmh-type-opt-icon">🏷️</span><span class="mmh-type-opt-label">Special / Offer</span></label>
+      <label class="mmh-type-opt"><input type="radio" name="mmhType" value="idea"><span class="mmh-type-opt-icon">💡</span><span class="mmh-type-opt-label">Idea</span></label>
+    </div>
+    <div class="mmh-form-row">
+      <label class="mmh-label">Title / Name</label>
+      <input class="mmh-input" placeholder="e.g. Friday Night Jazz Series…">
+    </div>
+    <div class="mmh-form-row-2">
+      <div>
+        <label class="mmh-label">Venue</label>
+        <select class="mmh-select">
+          <option>Riverside Bar</option>
+          <option>The Anchor</option>
+          <option>Marlin Pavilion</option>
+          <option>Rooftop Garden</option>
+        </select>
+      </div>
+      <div>
+        <label class="mmh-label">Proposed Date</label>
+        <input class="mmh-input" type="date">
+      </div>
+    </div>
+    <div class="mmh-form-row">
+      <label class="mmh-label">Description / Idea</label>
+      <textarea class="mmh-textarea" placeholder="Describe the event, campaign, or idea. Include any details that will help the team understand it…"></textarea>
+    </div>
+    <div class="mmh-form-row-2">
+      <div>
+        <label class="mmh-label">Estimated Budget</label>
+        <input class="mmh-input" placeholder="$0">
+      </div>
+      <div>
+        <label class="mmh-label">Expected Attendance</label>
+        <input class="mmh-input" placeholder="e.g. 100 guests">
+      </div>
+    </div>
+    <div class="mmh-form-row">
+      <label class="mmh-label">Supporting Files / Links (SharePoint)</label>
+      <input class="mmh-input" placeholder="Paste SharePoint folder URL or file link…">
+    </div>
+    <div class="mmh-modal-actions">
+      <button class="mmh-btn-cancel" onclick="mmhCloseModal()">Cancel</button>
+      <button class="mmh-btn-submit" onclick="mmhSubmit()">Submit for Approval →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PANEL: OVERVIEW
+══════════════════════════════════════════ -->
+<div class="mmh-panel active" id="panel-overview">
+
+  <!-- HERO -->
+  <div class="mmh-hero">
+    <div>
+      <div class="mmh-hero-eyebrow">Marlin Hospitality Group</div>
+      <h1>Marketing <em>Command</em><br>Centre.</h1>
+      <div class="mmh-hero-sub">Events, campaigns, specials & design — all in one place. Welcome back, Jamie 🌿</div>
+    </div>
+    <div class="mmh-kpi-row">
+      <div class="mmh-kpi"><div class="mmh-kpi-num">18</div><div class="mmh-kpi-label">Active Items</div><span class="mmh-kpi-tag">▲ 4 this week</span></div>
+      <div class="mmh-kpi"><div class="mmh-kpi-num">6</div><div class="mmh-kpi-label">Awaiting Approval</div><span class="mmh-kpi-tag">Needs review</span></div>
+      <div class="mmh-kpi"><div class="mmh-kpi-num">9</div><div class="mmh-kpi-label">Design Jobs</div><span class="mmh-kpi-tag">3 urgent</span></div>
+      <div class="mmh-kpi"><div class="mmh-kpi-num">4</div><div class="mmh-kpi-label">Venues Active</div><span class="mmh-kpi-tag">All running ✓</span></div>
+    </div>
+  </div>
+
+  <div class="mmh-body">
+    <div class="mmh-main">
+
+      <!-- PIPELINE PREVIEW -->
+      <div class="mmh-section">
+        <div class="mmh-section-hdr">
+          <div class="mmh-section-title">📋 Workflow Pipeline</div>
+          <button class="mmh-section-link" onclick="mmhNav(document.querySelector('[onclick*=pipeline]'),'pipeline')">Full pipeline →</button>
+        </div>
+        <div class="mmh-pipeline">
+          <div class="mmh-stage s-idea">
+            <div class="mmh-stage-hdr"><span class="mmh-stage-name">💡 Ideas</span><span class="mmh-stage-count">4</span></div>
+            <div class="mmh-card"><div class="mmh-card-name">Trivia Night Series</div><div class="mmh-card-venue">Riverside Bar</div><div class="mmh-card-footer"><span class="mmh-tag tag-event">Event</span><span class="mmh-card-date">Submitted today</span></div></div>
+            <div class="mmh-card"><div class="mmh-card-name">Winter Warming Campaign</div><div class="mmh-card-venue">All Venues</div><div class="mmh-card-footer"><span class="mmh-tag tag-campaign">Campaign</span><span class="mmh-card-date">2 days ago</span></div></div>
+          </div>
+          <div class="mmh-stage s-approve">
+            <div class="mmh-stage-hdr"><span class="mmh-stage-name">✅ Approval</span><span class="mmh-stage-count">6</span></div>
+            <div class="mmh-card"><div class="mmh-card-name">Friday Jazz Nights</div><div class="mmh-card-venue">Marlin Pavilion</div><div class="mmh-card-footer"><span class="mmh-tag tag-event">Event</span><span class="mmh-card-date">May 18</span></div></div>
+            <div class="mmh-card"><div class="mmh-card-name">Loyalty Member Dinner</div><div class="mmh-card-venue">The Anchor</div><div class="mmh-card-footer"><span class="mmh-tag tag-special">Special</span><span class="mmh-card-date">May 22</span></div></div>
+          </div>
+          <div class="mmh-stage s-design">
+            <div class="mmh-stage-hdr"><span class="mmh-stage-name">🎨 Design</span><span class="mmh-stage-count">5</span></div>
+            <div class="mmh-card"><div class="mmh-card-name">Summer Launch Assets</div><div class="mmh-card-venue">All Venues</div><div class="mmh-card-footer"><span class="mmh-tag tag-campaign">Campaign</span><span class="mmh-card-date">Due Fri</span></div></div>
+            <div class="mmh-card"><div class="mmh-card-name">Wine Week Poster</div><div class="mmh-card-venue">Rooftop Garden</div><div class="mmh-card-footer"><span class="mmh-tag tag-event">Event</span><span class="mmh-card-date">Due Mon</span></div></div>
+          </div>
+          <div class="mmh-stage s-plan">
+            <div class="mmh-stage-hdr"><span class="mmh-stage-name">📣 Mktg Plan</span><span class="mmh-stage-count">2</span></div>
+            <div class="mmh-card"><div class="mmh-card-name">Mother's Day Campaign</div><div class="mmh-card-venue">All Venues</div><div class="mmh-card-footer"><span class="mmh-tag tag-campaign">Campaign</span><span class="mmh-card-date">May 11</span></div></div>
+          </div>
+          <div class="mmh-stage s-publish">
+            <div class="mmh-stage-hdr"><span class="mmh-stage-name">🌐 Publishing</span><span class="mmh-stage-count">3</span></div>
+            <div class="mmh-card"><div class="mmh-card-name">Anzac Day Specials</div><div class="mmh-card-venue">Riverside Bar</div><div class="mmh-card-footer"><span class="mmh-tag tag-special">Special</span><span class="mmh-card-date">Live 25 Apr</span></div></div>
+          </div>
+          <div class="mmh-stage s-collateral">
+            <div class="mmh-stage-hdr"><span class="mmh-stage-name">🖨️ Collateral</span><span class="mmh-stage-count">2</span></div>
+            <div class="mmh-card"><div class="mmh-card-name">Easter Menu Inserts</div><div class="mmh-card-venue">The Anchor</div><div class="mmh-card-footer"><span class="mmh-tag tag-event">Event</span><span class="mmh-card-date">Printed</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UPCOMING EVENTS -->
+      <div class="mmh-section">
+        <div class="mmh-section-hdr">
+          <div class="mmh-section-title">📅 Upcoming Events & Campaigns</div>
+          <button class="mmh-section-link" onclick="mmhNav(document.querySelectorAll('.mmh-nav-btn')[2],'calendar')">Full calendar →</button>
+        </div>
+        <div class="mmh-cal-grid">
+          <div class="mmh-cal-top">
+            <span class="mmh-cal-month">May 2025</span>
+            <div class="mmh-cal-nav"><button class="mmh-cal-navbtn">‹</button><button class="mmh-cal-navbtn">›</button></div>
+          </div>
+          <div class="mmh-days-grid">
+            <div class="mmh-day-lbl">Su</div><div class="mmh-day-lbl">Mo</div><div class="mmh-day-lbl">Tu</div><div class="mmh-day-lbl">We</div><div class="mmh-day-lbl">Th</div><div class="mmh-day-lbl">Fr</div><div class="mmh-day-lbl">Sa</div>
+            <div class="mmh-day other">27</div><div class="mmh-day other">28</div><div class="mmh-day other">29</div><div class="mmh-day other">30</div><div class="mmh-day has-ev">1</div><div class="mmh-day">2</div><div class="mmh-day">3</div>
+            <div class="mmh-day">4</div><div class="mmh-day">5</div><div class="mmh-day has-ev">6</div><div class="mmh-day">7</div><div class="mmh-day has-ev">8</div><div class="mmh-day">9</div><div class="mmh-day has-ev">10</div>
+            <div class="mmh-day has-ev">11</div><div class="mmh-day">12</div><div class="mmh-day">13</div><div class="mmh-day today has-ev">14</div><div class="mmh-day has-ev">15</div><div class="mmh-day">16</div><div class="mmh-day">17</div>
+            <div class="mmh-day has-ev">18</div><div class="mmh-day">19</div><div class="mmh-day has-ev">20</div><div class="mmh-day">21</div><div class="mmh-day">22</div><div class="mmh-day has-ev">23</div><div class="mmh-day">24</div>
+            <div class="mmh-day">25</div><div class="mmh-day">26</div><div class="mmh-day">27</div><div class="mmh-day has-ev">28</div><div class="mmh-day">29</div><div class="mmh-day">30</div><div class="mmh-day">31</div>
+          </div>
+          <div class="mmh-events-list">
+            <div class="mmh-event-row"><div class="mmh-ev-dot" style="background:#4caf50"></div><span class="mmh-ev-title">Friday Jazz Nights — Launch</span><span class="mmh-ev-venue">Marlin Pavilion</span><span class="mmh-ev-date">Fri 15 May</span></div>
+            <div class="mmh-event-row"><div class="mmh-ev-dot" style="background:var(--gold)"></div><span class="mmh-ev-title">Mother's Day Campaign Goes Live</span><span class="mmh-ev-venue">All Venues</span><span class="mmh-ev-date">Sun 11 May</span></div>
+            <div class="mmh-event-row"><div class="mmh-ev-dot" style="background:var(--blue)"></div><span class="mmh-ev-title">Wine Week — Rooftop</span><span class="mmh-ev-venue">Rooftop Garden</span><span class="mmh-ev-date">20–23 May</span></div>
+            <div class="mmh-event-row"><div class="mmh-ev-dot" style="background:var(--terra)"></div><span class="mmh-ev-title">Loyalty Member Dinner</span><span class="mmh-ev-venue">The Anchor</span><span class="mmh-ev-date">Thu 22 May</span></div>
+            <div class="mmh-event-row"><div class="mmh-ev-dot" style="background:var(--purple)"></div><span class="mmh-ev-title">Winter Campaign Kickoff</span><span class="mmh-ev-venue">All Venues</span><span class="mmh-ev-date">28 May</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESIGN JOBS PREVIEW -->
+      <div class="mmh-section">
+        <div class="mmh-section-hdr">
+          <div class="mmh-section-title">🎨 Design Team Jobs</div>
+          <button class="mmh-section-link" onclick="mmhNav(document.querySelectorAll('.mmh-nav-btn')[3],'design')">All jobs →</button>
+        </div>
+        <div style="background:var(--white);border-radius:14px;overflow:hidden;border:1.5px solid var(--sand);">
+          <table class="mmh-design-table">
+            <thead><tr><th>Job</th><th>Venue</th><th>Type</th><th>Priority</th><th>Status</th><th>Due</th></tr></thead>
+            <tbody>
+              <tr><td><div class="mmh-job-name">Summer Launch Social Pack</div><div class="mmh-job-sub">16 assets — Instagram, Facebook, EDM header</div></td><td style="font-size:11px;color:var(--text-light)">All Venues</td><td><span class="mmh-tag tag-campaign">Campaign</span></td><td><span class="mmh-priority pri-urgent">Urgent</span></td><td><span class="mmh-status-pill sp-inprog">In Progress</span></td><td style="font-size:11px;color:var(--terra);font-weight:600;">Fri 16 May</td></tr>
+              <tr><td><div class="mmh-job-name">Wine Week Event Poster</div><div class="mmh-job-sub">A2 print + digital versions</div></td><td style="font-size:11px;color:var(--text-light)">Rooftop Garden</td><td><span class="mmh-tag tag-event">Event</span></td><td><span class="mmh-priority pri-high">High</span></td><td><span class="mmh-status-pill sp-waiting">Waiting on Brief</span></td><td style="font-size:11px;color:var(--gold);font-weight:600;">Mon 19 May</td></tr>
+              <tr><td><div class="mmh-job-name">Loyalty Dinner Invite</div><div class="mmh-job-sub">Email invite + printed menu card</div></td><td style="font-size:11px;color:var(--text-light)">The Anchor</td><td><span class="mmh-tag tag-special">Special</span></td><td><span class="mmh-priority pri-high">High</span></td><td><span class="mmh-status-pill sp-review">In Review</span></td><td style="font-size:11px;color:var(--text-mid);font-weight:600;">Wed 21 May</td></tr>
+              <tr><td><div class="mmh-job-name">Jazz Night Social Tiles</div><div class="mmh-job-sub">Weekly recurring — 4 tiles per week</div></td><td style="font-size:11px;color:var(--text-light)">Marlin Pavilion</td><td><span class="mmh-tag tag-event">Event</span></td><td><span class="mmh-priority pri-normal">Normal</span></td><td><span class="mmh-status-pill sp-done">Done ✓</span></td><td style="font-size:11px;color:#2e7d32;font-weight:600;">Delivered</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /mmh-main -->
+
+    <!-- SIDEBAR -->
+    <aside class="mmh-sidebar">
+
+      <!-- ANNOUNCEMENTS -->
+      <div class="mmh-sb-section">
+        <div class="mmh-sb-title">Announcements <span class="mmh-sb-tag">2 new</span></div>
+        <div class="mmh-announce pin">
+          <div class="mmh-ann-lbl">📌 Pinned</div>
+          <div class="mmh-ann-title">All events must be submitted min. 4 weeks before date.</div>
+          <div class="mmh-ann-date">Marketing Policy · Always active</div>
+        </div>
+        <div class="mmh-announce">
+          <div class="mmh-ann-lbl">Update</div>
+          <div class="mmh-ann-title">Brand refresh complete — new templates uploaded to SharePoint.</div>
+          <div class="mmh-ann-date">Sarah L. · Today</div>
+        </div>
+        <div class="mmh-announce">
+          <div class="mmh-ann-lbl">Reminder</div>
+          <div class="mmh-ann-title">Q2 campaign budget finalised — check your venue allocation.</div>
+          <div class="mmh-ann-date">Finance · May 12</div>
+        </div>
+      </div>
+
+      <!-- SPECIALS & REWARDS -->
+      <div class="mmh-sb-section">
+        <div class="mmh-sb-title">Specials & Rewards</div>
+        <div class="mmh-special">
+          <span class="mmh-special-icon">🍷</span>
+          <div>
+            <div class="mmh-special-name">Wine Wednesday 2-for-1</div>
+            <div class="mmh-special-venue">Riverside Bar · Every Wednesday</div>
+            <div class="mmh-special-disc">Loyalty: 20% off · Code: RSWINE</div>
+          </div>
+        </div>
+        <div class="mmh-special">
+          <span class="mmh-special-icon">🍔</span>
+          <div>
+            <div class="mmh-special-name">Locals Lunch Deal</div>
+            <div class="mmh-special-venue">The Anchor · Weekdays 12–2pm</div>
+            <div class="mmh-special-disc">Loyalty: 15% off · Code: ANCHLUNCH</div>
+          </div>
+        </div>
+        <div class="mmh-special">
+          <span class="mmh-special-icon">🌅</span>
+          <div>
+            <div class="mmh-special-name">Sunset Sessions</div>
+            <div class="mmh-special-venue">Rooftop Garden · Fridays 4–7pm</div>
+            <div class="mmh-special-disc">Members: Free entry + drinks special</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK FILES -->
+      <div class="mmh-sb-section">
+        <div class="mmh-sb-title">Recent Files</div>
+        <div class="mmh-file"><span class="mmh-file-icon">📁</span><div><div class="mmh-file-name">Brand Kit 2025</div><div class="mmh-file-meta">SharePoint · Updated today</div></div></div>
+        <div class="mmh-file"><span class="mmh-file-icon">📐</span><div><div class="mmh-file-name">Event Brief Template</div><div class="mmh-file-meta">SharePoint · .docx</div></div></div>
+        <div class="mmh-file"><span class="mmh-file-icon">🖼️</span><div><div class="mmh-file-name">Summer Campaign Images</div><div class="mmh-file-meta">SharePoint · 34 files</div></div></div>
+        <div class="mmh-file"><span class="mmh-file-icon">📊</span><div><div class="mmh-file-name">Q2 Campaign Report</div><div class="mmh-file-meta">SharePoint · .xlsx</div></div></div>
+        <div class="mmh-file"><span class="mmh-file-icon">📝</span><div><div class="mmh-file-name">Social Post Templates</div><div class="mmh-file-meta">SharePoint · Canva link</div></div></div>
+      </div>
+
+      <!-- VENUE SNAPSHOT -->
+      <div class="mmh-sb-section">
+        <div class="mmh-sb-title">Venue Snapshot</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="background:var(--white);border-radius:10px;padding:12px;font-size:12px;">
+            <div style="font-weight:700;color:var(--forest);margin-bottom:6px;">🍸 Riverside Bar</div>
+            <div style="display:flex;justify-content:space-between;color:var(--text-light);margin-bottom:4px;"><span>Active items</span><strong style="color:var(--forest)">5</strong></div>
+            <div style="display:flex;justify-content:space-between;color:var(--text-light);"><span>Pending approval</span><strong style="color:var(--gold)">2</strong></div>
+            <div class="mmh-venue-bar"><div class="mmh-venue-fill" style="width:70%"></div></div>
+          </div>
+          <div style="background:var(--white);border-radius:10px;padding:12px;font-size:12px;">
+            <div style="font-weight:700;color:var(--forest);margin-bottom:6px;">⚓ The Anchor</div>
+            <div style="display:flex;justify-content:space-between;color:var(--text-light);margin-bottom:4px;"><span>Active items</span><strong style="color:var(--forest)">4</strong></div>
+            <div style="display:flex;justify-content:space-between;color:var(--text-light);"><span>Pending approval</span><strong style="color:var(--gold)">1</strong></div>
+            <div class="mmh-venue-bar"><div class="mmh-venue-fill" style="width:55%"></div></div>
+          </div>
+          <div style="background:var(--white);border-radius:10px;padding:12px;font-size:12px;">
+            <div style="font-weight:700;color:var(--forest);margin-bottom:6px;">🎪 Marlin Pavilion</div>
+            <div style="display:flex;justify-content:space-between;color:var(--text-light);margin-bottom:4px;"><span>Active items</span><strong style="color:var(--forest)">6</strong></div>
+            <div style="display:flex;justify-content:space-between;color:var(--text-light);"><span>Pending approval</span><strong style="color:var(--gold)">2</strong></div>
+            <div class="mmh-venue-bar"><div class="mmh-venue-fill" style="width:85%"></div></div>
+          </div>
+          <div style="background:var(--white);border-radius:10px;padding:12px;font-size:12px;">
+            <div style="font-weight:700;color:var(--forest);margin-bottom:6px;">🌿 Rooftop Garden</div>
+            <div style="display:flex;justify-content:space-between;color:var(--text-light);margin-bottom:4px;"><span>Active items</span><strong style="color:var(--forest)">3</strong></div>
+            <div style="display:flex;justify-content:space-between;color:var(--text-light);"><span>Pending approval</span><strong style="color:var(--gold)">1</strong></div>
+            <div class="mmh-venue-bar"><div class="mmh-venue-fill" style="width:40%"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PANEL: PIPELINE (full)
+══════════════════════════════════════════ -->
+<div class="mmh-panel" id="panel-pipeline">
+  <div class="mmh-hero" style="padding:24px 32px;">
+    <div>
+      <div class="mmh-hero-eyebrow">Workflow</div>
+      <h1>Event & Campaign <em>Pipeline</em></h1>
+      <div class="mmh-hero-sub">Track every item from idea through to published and in-venue. Filter by venue using the top bar.</div>
+    </div>
+    <div class="mmh-kpi-row">
+      <div class="mmh-kpi"><div class="mmh-kpi-num">4</div><div class="mmh-kpi-label">Ideas</div></div>
+      <div class="mmh-kpi"><div class="mmh-kpi-num">6</div><div class="mmh-kpi-label">Awaiting Approval</div></div>
+      <div class="mmh-kpi"><div class="mmh-kpi-num">5</div><div class="mmh-kpi-label">In Design</div></div>
+      <div class="mmh-kpi"><div class="mmh-kpi-num">3</div><div class="mmh-kpi-label">Publishing</div></div>
+    </div>
+  </div>
+  <div style="padding:24px 28px;">
+    <div class="mmh-pipeline">
+      <div class="mmh-stage s-idea">
+        <div class="mmh-stage-hdr"><span class="mmh-stage-name">💡 Ideas</span><span class="mmh-stage-count">4</span></div>
+        <div class="mmh-card"><div class="mmh-card-name">Trivia Night Series</div><div class="mmh-card-venue">Riverside Bar</div><div class="mmh-card-footer"><span class="mmh-tag tag-event">Event</span><span class="mmh-card-date">Today</span></div></div>
+        <div class="mmh-card"><div class="mmh-card-name">Winter Warming Campaign</div><div class="mmh-card-venue">All Venues</div><div class="mmh-card-footer"><span class="mmh-tag tag-campaign">Campaign</span><span class="mmh-card-date">2 days ago</span></div></div>
+        <div class="mmh-card"><div class="mmh-card-name">Sunday Sessions Relaunch</div><div class="mmh-card-venue">Rooftop Garden</div><div class="mmh-card-footer"><span class="mmh-tag tag-event">Event</span><span class="mmh-card-date">3 days ago</span></div></div>
+        <div class="mmh-card"><div class="mmh-card-name">Locals Loyalty Push</div><div class="mmh-card-venue">The Anchor</div><div class="mmh-card-footer"><span class="mmh-tag tag-campaign">Campaign</span><span class="mmh-card-date">1 week ago</span></div></div>
+      </div>
+      <div class="mmh-stage s-approve">
+        <div class="mmh-stage-hdr"><span class="mmh-stage-name">✅ Approval</span><span class="mmh-stage-count">6</span></div>
+        <div class="mmh-card"><div class="mmh-card-name">Friday Jazz Nights</div><div class="mmh-card-venue">Marlin Pavilion</div><div class="mmh-card-footer"><span class="mmh-tag tag-event">Event</span><span class="mmh-card-date">May 18</span></div></div>
+        <div class="mmh-card"><div class="mmh-card-name">Loyalty Member Dinner</div><div class="mmh-card-venue">The Anchor</div><div class="mmh-card-footer"><span class="mmh-tag tag-special">Special</span><span class="mmh-card-date">May 22</span></div></div>
+        <div class="mmh-card"><div class="mmh-card-name">Cocktail Masterclass</div><div class="mmh-card-venue">Riverside Bar</div><div class="mmh-card-footer"><span class="mmh-tag tag-event">Event</span><span class="mmh-card-date">May 29</span></div></div>
+        <div class="mmh-card"><div class="mmh-card-name">Happy Hour Extension</div><div class="mmh-card-venue">All Venues</div><div class="mmh-card-footer"><span class="mmh-tag tag-special">Special</span><span class="mmh-card-date">Ongoing</span></div></div>
+      </div>
+      <div class="mmh-stage s-design">
+        <div class="mmh-stage-hdr"><span class="mmh-stage-name">🎨 Design</span><span class="mmh-stage-count">5</span></div>
+        <div class="mmh-card"><div class="mmh-card-name">Summer Launch Assets</div><div class="mmh-card-venue">All Venues</div><div class="mmh-card-footer"><span class="mmh-tag tag-campaign">Campaign</span><span class="mmh-card-date">Due Fri</span></div></div>
+        <div class="mmh-card"><div class="mmh-card-name">Wine Week Poster</div><div class="mmh-card-venue">Rooftop Garden</div><div class="mmh-card-footer"><span class="mmh-tag tag-event">Event</span><span class="mmh-card-date">Due Mon</span></div></div>
+        <div class="mmh-card"><div class="mmh-card-name">Jazz Night Tiles</div><div class="mmh-card-venue">Marlin Pavilion</div><div class="mmh-card-footer"><span class="mmh-tag tag-event">Event</span><span class="mmh-card-date">Done ✓</span></div></div>
+      </div>
+      <div class="mmh-stage s-plan">
+        <div class="mmh-stage-hdr"><span class="mmh-stage-name">📣 Mktg Plan</span><span class="mmh-stage-count">2</span></div>
+        <div class="mmh-card"><div class="mmh-card-name">Mother's Day Campaign</div><div class="mmh-card-venue">All Venues</div><div class="mmh-card-footer"><span class="mmh-tag tag-campaign">Campaign</span><span class="mmh-card-date">May 11</span></div></div>
+        <div class="mmh-card"><div class="mmh-card-name">Locals Lunch Promo</div><div class="mmh-card-venue">The Anchor</div><div class="mmh-card-footer"><span class="mmh-tag tag-special">Special</span><span class="mmh-card-date">May 17</span></div></div>
+      </div>
+      <div class="mmh-stage s-publish">
+        <div class="mmh-stage-hdr"><span class="mmh-stage-name">🌐 Publishing</span><span class="mmh-stage-count">3</span></div>
+        <div class="mmh-card"><div class="mmh-card-name">Anzac Day Specials</div><div class="mmh-card-venue">Riverside Bar</div><div class="mmh-card-footer"><span class="mmh-tag tag-special">Special</span><span class="mmh-card-date">Live Apr 25</span></div></div>
+        <div class="mmh-card"><div class="mmh-card-name">Easter Menu</div><div class="mmh-card-venue">All Venues</div><div class="mmh-card-footer"><span class="mmh-tag tag-event">Event</span><span class="mmh-card-date">Published</span></div></div>
+      </div>
+      <div class="mmh-stage s-collateral">
+        <div class="mmh-stage-hdr"><span class="mmh-stage-name">🖨️ Collateral</span><span class="mmh-stage-count">2</span></div>
+        <div class="mmh-card"><div class="mmh-card-name">Easter Menu Inserts</div><div class="mmh-card-venue">The Anchor</div><div class="mmh-card-footer"><span class="mmh-tag tag-event">Event</span><span class="mmh-card-date">Printed</span></div></div>
+        <div class="mmh-card"><div class="mmh-card-name">Winter Drink Card</div><div class="mmh-card-venue">All Venues</div><div class="mmh-card-footer"><span class="mmh-tag tag-campaign">Campaign</span><span class="mmh-card-date">Printing</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PANEL: CALENDAR
+══════════════════════════════════════════ -->
+<div class="mmh-panel" id="panel-calendar">
+  <div class="mmh-hero" style="padding:24px 32px;">
+    <div>
+      <div class="mmh-hero-eyebrow">Schedule</div>
+      <h1>Events <em>& Campaigns</em> Calendar</h1>
+      <div class="mmh-hero-sub">All venues, all event types in one view. Connect to your SharePoint List for live data.</div>
+    </div>
+    <div class="mmh-kpi-row">
+      <div class="mmh-kpi"><div class="mmh-kpi-num">12</div><div class="mmh-kpi-label">Events in May</div></div>
+      <div class="mmh-kpi"><div class="mmh-kpi-num">5</div><div class="mmh-kpi-label">Campaigns</div></div>
+      <div class="mmh-kpi"><div class="mmh-kpi-num">8</div><div class="mmh-kpi-label">Specials Running</div></div>
+    </div>
+  </div>
+  <div style="padding:24px 28px;">
+    <div style="background:var(--white);border-radius:16px;padding:24px;border:1.5px solid var(--sand);">
+      <div class="mmh-cal-top">
+        <span class="mmh-cal-month">May 2025 — Full View</span>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span style="font-size:11px;color:var(--text-light);margin-right:4px;">Filter:</span>
+          <span class="mmh-tag tag-event" style="cursor:pointer;padding:4px 12px;">Events</span>
+          <span class="mmh-tag tag-campaign" style="cursor:pointer;padding:4px 12px;">Campaigns</span>
+          <span class="mmh-tag tag-special" style="cursor:pointer;padding:4px 12px;">Specials</span>
+          <div class="mmh-cal-nav"><button class="mmh-cal-navbtn">‹</button><button class="mmh-cal-navbtn">›</button></div>
+        </div>
+      </div>
+      <div class="mmh-days-grid">
+        <div class="mmh-day-lbl">Su</div><div class="mmh-day-lbl">Mo</div><div class="mmh-day-lbl">Tu</div><div class="mmh-day-lbl">We</div><div class="mmh-day-lbl">Th</div><div class="mmh-day-lbl">Fr</div><div class="mmh-day-lbl">Sa</div>
+        <div class="mmh-day other">27</div><div class="mmh-day other">28</div><div class="mmh-day other">29</div><div class="mmh-day other">30</div><div class="mmh-day has-ev">1</div><div class="mmh-day">2</div><div class="mmh-day">3</div>
+        <div class="mmh-day">4</div><div class="mmh-day">5</div><div class="mmh-day has-ev">6</div><div class="mmh-day">7</div><div class="mmh-day has-ev">8</div><div class="mmh-day">9</div><div class="mmh-day has-ev">10</div>
+        <div class="mmh-day has-ev">11</div><div class="mmh-day">12</div><div class="mmh-day">13</div><div class="mmh-day today has-ev">14</div><div class="mmh-day has-ev">15</div><div class="mmh-day">16</div><div class="mmh-day">17</div>
+        <div class="mmh-day has-ev">18</div><div class="mmh-day">19</div><div class="mmh-day has-ev">20</div><div class="mmh-day">21</div><div class="mmh-day">22</div><div class="mmh-day has-ev">23</div><div class="mmh-day">24</div>
+        <div class="mmh-day">25</div><div class="mmh-day">26</div><div class="mmh-day">27</div><div class="mmh-day has-ev">28</div><div class="mmh-day">29</div><div class="mmh-day">30</div><div class="mmh-day">31</div>
+      </div>
+      <div class="mmh-events-list" style="margin-top:20px;">
+        <div class="mmh-event-row"><div class="mmh-ev-dot" style="background:#4caf50"></div><span class="mmh-tag tag-event" style="margin-right:4px;font-size:9px;">Event</span><span class="mmh-ev-title">Friday Jazz Nights — Launch</span><span class="mmh-ev-venue">Marlin Pavilion</span><span class="mmh-ev-date">Fri 15 May</span></div>
+        <div class="mmh-event-row"><div class="mmh-ev-dot" style="background:var(--gold)"></div><span class="mmh-tag tag-campaign" style="margin-right:4px;font-size:9px;">Campaign</span><span class="mmh-ev-title">Mother's Day Campaign Goes Live</span><span class="mmh-ev-venue">All Venues</span><span class="mmh-ev-date">Sun 11 May</span></div>
+        <div class="mmh-event-row"><div class="mmh-ev-dot" style="background:var(--blue)"></div><span class="mmh-tag tag-event" style="margin-right:4px;font-size:9px;">Event</span><span class="mmh-ev-title">Wine Week — Rooftop</span><span class="mmh-ev-venue">Rooftop Garden</span><span class="mmh-ev-date">20–23 May</span></div>
+        <div class="mmh-event-row"><div class="mmh-ev-dot" style="background:var(--terra)"></div><span class="mmh-tag tag-special" style="margin-right:4px;font-size:9px;">Special</span><span class="mmh-ev-title">Loyalty Member Dinner</span><span class="mmh-ev-venue">The Anchor</span><span class="mmh-ev-date">Thu 22 May</span></div>
+        <div class="mmh-event-row"><div class="mmh-ev-dot" style="background:var(--purple)"></div><span class="mmh-tag tag-campaign" style="margin-right:4px;font-size:9px;">Campaign</span><span class="mmh-ev-title">Winter Campaign Kickoff</span><span class="mmh-ev-venue">All Venues</span><span class="mmh-ev-date">28 May</span></div>
+        <div class="mmh-event-row"><div class="mmh-ev-dot" style="background:var(--sage)"></div><span class="mmh-tag tag-event" style="margin-right:4px;font-size:9px;">Event</span><span class="mmh-ev-title">Cocktail Masterclass</span><span class="mmh-ev-venue">Riverside Bar</span><span class="mmh-ev-date">Thu 29 May</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PANEL: DESIGN JOBS
+══════════════════════════════════════════ -->
+<div class="mmh-panel" id="panel-design">
+  <div class="mmh-hero" style="padding:24px 32px;">
+    <div>
+      <div class="mmh-hero-eyebrow">Design Team</div>
+      <h1>Design <em>Job Tracker</em></h1>
+      <div class="mmh-hero-sub">What the design team is working on, waiting for, or has completed across all venues.</div>
+    </div>
+    <div class="mmh-kpi-row">
+      <div class="mmh-kpi"><div class="mmh-kpi-num">9</div><div class="mmh-kpi-label">Total Jobs</div></div>
+      <div class="mmh-kpi"><div class="mmh-kpi-num">3</div><div class="mmh-kpi-label">Urgent</div><span class="mmh-kpi-tag">Action needed</span></div>
+      <div class="mmh-kpi"><div class="mmh-kpi-num">2</div><div class="mmh-kpi-label">Waiting on Brief</div></div>
+      <div class="mmh-kpi"><div class="mmh-kpi-num">3</div><div class="mmh-kpi-label">Completed</div></div>
+    </div>
+  </div>
+  <div style="padding:24px 28px;">
+    <div style="background:var(--white);border-radius:16px;overflow:hidden;border:1.5px solid var(--sand);">
+      <table class="mmh-design-table">
+        <thead><tr><th>Job</th><th>Venue</th><th>Type</th><th>Deliverables</th><th>Priority</th><th>Status</th><th>Due</th><th>Files</th></tr></thead>
+        <tbody>
+          <tr><td><div class="mmh-job-name">Summer Launch Social Pack</div><div class="mmh-job-sub">Full social campaign</div></td><td style="font-size:11px;color:var(--text-light)">All Venues</td><td><span class="mmh-tag tag-campaign">Campaign</span></td><td style="font-size:11px;color:var(--text-light)">16 assets — IG, FB, EDM</td><td><span class="mmh-priority pri-urgent">Urgent</span></td><td><span class="mmh-status-pill sp-inprog">In Progress</span></td><td style="font-size:11px;color:var(--terra);font-weight:600;">Fri 16 May</td><td><span style="font-size:18px;cursor:pointer" title="Open SharePoint folder">📁</span></td></tr>
+          <tr><td><div class="mmh-job-name">Wine Week Poster</div><div class="mmh-job-sub">Print + digital</div></td><td style="font-size:11px;color:var(--text-light)">Rooftop Garden</td><td><span class="mmh-tag tag-event">Event</span></td><td style="font-size:11px;color:var(--text-light)">A2 print + web version</td><td><span class="mmh-priority pri-urgent">Urgent</span></td><td><span class="mmh-status-pill sp-waiting">Waiting on Brief</span></td><td style="font-size:11px;color:var(--gold);font-weight:600;">Mon 19 May</td><td><span style="font-size:18px;cursor:pointer">📁</span></td></tr>
+          <tr><td><div class="mmh-job-name">Loyalty Dinner Invite</div><div class="mmh-job-sub">Email + printed card</div></td><td style="font-size:11px;color:var(--text-light)">The Anchor</td><td><span class="mmh-tag tag-special">Special</span></td><td style="font-size:11px;color:var(--text-light)">Email HTML + menu card</td><td><span class="mmh-priority pri-urgent">Urgent</span></td><td><span class="mmh-status-pill sp-review">In Review</span></td><td style="font-size:11px;color:var(--gold);font-weight:600;">Wed 21 May</td><td><span style="font-size:18px;cursor:pointer">📁</span></td></tr>
+          <tr><td><div class="mmh-job-name">Jazz Night Social Tiles</div><div class="mmh-job-sub">Weekly recurring</div></td><td style="font-size:11px;color:var(--text-light)">Marlin Pavilion</td><td><span class="mmh-tag tag-event">Event</span></td><td style="font-size:11px;color:var(--text-light)">4 tiles per week</td><td><span class="mmh-priority pri-high">High</span></td><td><span class="mmh-status-pill sp-done">Done ✓</span></td><td style="font-size:11px;color:#2e7d32;font-weight:600;">Delivered</td><td><span style="font-size:18px;cursor:pointer">📁</span></td></tr>
+          <tr><td><div class="mmh-job-name">Winter Campaign Hero Image</div><div class="mmh-job-sub">Photography direction</div></td><td style="font-size:11px;color:var(--text-light)">All Venues</td><td><span class="mmh-tag tag-campaign">Campaign</span></td><td style="font-size:11px;color:var(--text-light)">Website hero + OOH</td><td><span class="mmh-priority pri-high">High</span></td><td><span class="mmh-status-pill sp-waiting">Waiting on Brief</span></td><td style="font-size:11px;color:var(--text-mid);font-weight:600;">28 May</td><td><span style="font-size:18px;cursor:pointer">📁</span></td></tr>
+          <tr><td><div class="mmh-job-name">Easter Menu Inserts</div><div class="mmh-job-sub">Print collateral</div></td><td style="font-size:11px;color:var(--text-light)">The Anchor</td><td><span class="mmh-tag tag-event">Event</span></td><td style="font-size:11px;color:var(--text-light)">A5 folded insert × 200</td><td><span class="mmh-priority pri-normal">Normal</span></td><td><span class="mmh-status-pill sp-done">Done ✓</span></td><td style="font-size:11px;color:#2e7d32;font-weight:600;">Printed</td><td><span style="font-size:18px;cursor:pointer">📁</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PANEL: VENUES
+══════════════════════════════════════════ -->
+<div class="mmh-panel" id="panel-venues">
+  <div class="mmh-hero" style="padding:24px 32px;">
+    <div>
+      <div class="mmh-hero-eyebrow">Venue Overview</div>
+      <h1>All <em>Venues</em> at a Glance</h1>
+      <div class="mmh-hero-sub">See what's happening at each venue — events, campaigns, specials and activity.</div>
+    </div>
+  </div>
+  <div style="padding:24px 28px;">
+    <div class="mmh-venues" style="grid-template-columns:repeat(2,1fr);">
+
+      <div class="mmh-venue-card featured">
+        <div class="mmh-venue-name">🍸 Riverside Bar</div>
+        <div class="mmh-venue-sub">Waterfront · Casual dining & cocktails</div>
+        <div class="mmh-venue-stats">
+          <div class="mmh-vs"><div class="mmh-vs-num">5</div><div class="mmh-vs-lbl">Active</div></div>
+          <div class="mmh-vs"><div class="mmh-vs-num">2</div><div class="mmh-vs-lbl">Pending</div></div>
+          <div class="mmh-vs"><div class="mmh-vs-num">3</div><div class="mmh-vs-lbl">Specials</div></div>
+        </div>
+        <div class="mmh-venue-bar"><div class="mmh-venue-fill" style="width:70%"></div></div>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
+          <div class="mmh-event-row" style="background:var(--cream);"><div class="mmh-ev-dot" style="background:var(--gold)"></div><span class="mmh-ev-title" style="font-size:11px;">Trivia Nights — Idea stage</span><span class="mmh-tag tag-event" style="font-size:9px;">Event</span></div>
+          <div class="mmh-event-row" style="background:var(--cream);"><div class="mmh-ev-dot" style="background:#4caf50"></div><span class="mmh-ev-title" style="font-size:11px;">Wine Wed 2-for-1 — Live</span><span class="mmh-tag tag-special" style="font-size:9px;">Special</span></div>
+          <div class="mmh-event-row" style="background:var(--cream);"><div class="mmh-ev-dot" style="background:var(--blue)"></div><span class="mmh-ev-title" style="font-size:11px;">Cocktail Masterclass — Approval</span><span class="mmh-tag tag-event" style="font-size:9px;">Event</span></div>
+        </div>
+      </div>
+
+      <div class="mmh-venue-card">
+        <div class="mmh-venue-name">⚓ The Anchor</div>
+        <div class="mmh-venue-sub">Heritage pub · Locals favourite</div>
+        <div class="mmh-venue-stats">
+          <div class="mmh-vs"><div class="mmh-vs-num">4</div><div class="mmh-vs-lbl">Active</div></div>
+          <div class="mmh-vs"><div class="mmh-vs-num">1</div><div class="mmh-vs-lbl">Pending</div></div>
+          <div class="mmh-vs"><div class="mmh-vs-num">2</div><div class="mmh-vs-lbl">Specials</div></div>
+        </div>
+        <div class="mmh-venue-bar"><div class="mmh-venue-fill" style="width:55%"></div></div>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
+          <div class="mmh-event-row" style="background:var(--cream);"><div class="mmh-ev-dot" style="background:var(--terra)"></div><span class="mmh-ev-title" style="font-size:11px;">Loyalty Member Dinner — Approval</span><span class="mmh-tag tag-special" style="font-size:9px;">Special</span></div>
+          <div class="mmh-event-row" style="background:var(--cream);"><div class="mmh-ev-dot" style="background:#4caf50"></div><span class="mmh-ev-title" style="font-size:11px;">Locals Lunch Deal — Live</span><span class="mmh-tag tag-special" style="font-size:9px;">Special</span></div>
+        </div>
+      </div>
+
+      <div class="mmh-venue-card">
+        <div class="mmh-venue-name">🎪 Marlin Pavilion</div>
+        <div class="mmh-venue-sub">Events venue · Functions & live music</div>
+        <div class="mmh-venue-stats">
+          <div class="mmh-vs"><div class="mmh-vs-num">6</div><div class="mmh-vs-lbl">Active</div></div>
+          <div class="mmh-vs"><div class="mmh-vs-num">2</div><div class="mmh-vs-lbl">Pending</div></div>
+          <div class="mmh-vs"><div class="mmh-vs-num">1</div><div class="mmh-vs-lbl">Specials</div></div>
+        </div>
+        <div class="mmh-venue-bar"><div class="mmh-venue-fill" style="width:85%"></div></div>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
+          <div class="mmh-event-row" style="background:var(--cream);"><div class="mmh-ev-dot" style="background:var(--purple)"></div><span class="mmh-ev-title" style="font-size:11px;">Friday Jazz Nights — Design</span><span class="mmh-tag tag-event" style="font-size:9px;">Event</span></div>
+          <div class="mmh-event-row" style="background:var(--cream);"><div class="mmh-ev-dot" style="background:var(--gold)"></div><span class="mmh-ev-title" style="font-size:11px;">Summer Launch — In Progress</span><span class="mmh-tag tag-campaign" style="font-size:9px;">Campaign</span></div>
+        </div>
+      </div>
+
+      <div class="mmh-venue-card">
+        <div class="mmh-venue-name">🌿 Rooftop Garden</div>
+        <div class="mmh-venue-sub">Outdoor bar · Sunsets & events</div>
+        <div class="mmh-venue-stats">
+          <div class="mmh-vs"><div class="mmh-vs-num">3</div><div class="mmh-vs-lbl">Active</div></div>
+          <div class="mmh-vs"><div class="mmh-vs-num">1</div><div class="mmh-vs-lbl">Pending</div></div>
+          <div class="mmh-vs"><div class="mmh-vs-num">2</div><div class="mmh-vs-lbl">Specials</div></div>
+        </div>
+        <div class="mmh-venue-bar"><div class="mmh-venue-fill" style="width:40%"></div></div>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
+          <div class="mmh-event-row" style="background:var(--cream);"><div class="mmh-ev-dot" style="background:var(--blue)"></div><span class="mmh-ev-title" style="font-size:11px;">Wine Week — Design stage</span><span class="mmh-tag tag-event" style="font-size:9px;">Event</span></div>
+          <div class="mmh-event-row" style="background:var(--cream);"><div class="mmh-ev-dot" style="background:#4caf50"></div><span class="mmh-ev-title" style="font-size:11px;">Sunset Sessions — Live</span><span class="mmh-tag tag-special" style="font-size:9px;">Special</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /mmh root -->
+
+<script>
+function mmhNav(btn, panel) {
+  document.querySelectorAll('.mmh-nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mmh-panel').forEach(p => p.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  const p = document.getElementById('panel-' + panel);
+  if(p) p.classList.add('active');
+}
+function mmhOpenModal() {
+  document.getElementById('mmhOverlay').classList.add('open');
+}
+function mmhCloseModal() {
+  document.getElementById('mmhOverlay').classList.remove('open');
+}
+function mmhSubmit() {
+  alert('✅ Submitted! Your idea/event has entered the approval queue. The marketing team will review it shortly.');
+  mmhCloseModal();
+}
+function mmhFilterVenue(v) {
+  console.log('Filtering by venue:', v);
+  // In live SharePoint version, this would filter the SharePoint List data
+}
+document.getElementById('mmhOverlay').addEventListener('click', function(e) {
+  if(e.target === this) mmhCloseModal();
+});
+</script>
+</body>
+</html>
